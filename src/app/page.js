@@ -26,21 +26,11 @@ const PDF_URLS = {
 const getNextId = () => String(Math.random()).slice(2);
 
 const Home = () => {
-  // const [url, setUrl] = useState(PDF_URLS.primary);
   const [highlights, setHighlights] = useState([
     ...testHighlights[PDF_URLS.primary],
   ]);
   const [highlightId, setHighlightId] = useState(null);
-  const [scrollToSidebar, setScrollToSideBar] = useState(false);
   const scrollViewerTo = useRef(() => {});
-  const sideBarRef = useRef();
-
-  // const toggleDocument = () => {
-  //   const newUrl =
-  //     url === PDF_URLS.primary ? PDF_URLS.secondary : PDF_URLS.primary;
-  //   setUrl(newUrl);
-  //   setHighlights([]);
-  // };
 
   const getHighlightById = (id) =>
     highlights.find((highlight) => highlight.id === id);
@@ -54,14 +44,23 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (highlightId && !scrollToSidebar) {
+    if (highlightId) {
       scrollToSelectedHighlight();
     }
   }, [highlightId, scrollViewerTo]);
 
   const addHighlight = (highlight) => {
+    // Check if there is no text then add placeholder
+    const highlightObj = {
+      ...highlight,
+      comment: {
+        ...highlight.comment,
+        text: highlight.comment.text !== "" ? highlight.comment.text : "Text",
+      },
+    };
+
     setHighlights((prevHighlights) => [
-      { ...highlight, id: getNextId() },
+      { ...highlightObj, id: getNextId() },
       ...prevHighlights,
     ]);
   };
@@ -86,9 +85,7 @@ const Home = () => {
         highlights={highlights}
         resetHighlights={() => setHighlights([])}
         highlightId={highlightId}
-        setScrollToSideBar={setScrollToSideBar}
         setHighlightId={setHighlightId}
-        sideBarRef={sideBarRef}
       />
       <div style={{ height: "100vh", width: "75vw", position: "relative" }}>
         <PdfLoader url={PDF_URLS.primary} beforeLoad={<Spinner />}>
@@ -134,10 +131,6 @@ const Home = () => {
                     isScrolledTo={isScrolledTo}
                     position={highlight.position}
                     comment={highlight.comment}
-                    onClick={() => {
-                      setScrollToSideBar(true);
-                      setHighlightId(highlight.id);
-                    }}
                   />
                 ) : (
                   <AreaHighlight
@@ -155,9 +148,7 @@ const Home = () => {
 
                 return (
                   <Popup
-                    popupContent={
-                      <HighlightPopup sideBarRef={sideBarRef} {...highlight} />
-                    }
+                    popupContent={<HighlightPopup {...highlight} />}
                     onMouseOver={(popupContent) =>
                       setTip(highlight, () => popupContent)
                     }

@@ -158,7 +158,7 @@ const testHighlights = {
         pageNumber: 4,
       },
       comment: {
-        text: "",
+        text: "Hey",
         emoji: "",
       },
       id: "32839601376722394",
@@ -181,7 +181,7 @@ const testHighlights = {
         pageNumber: 24,
       },
       comment: {
-        text: "",
+        text: "new image",
         emoji: "",
       },
       id: "46570518065661615",

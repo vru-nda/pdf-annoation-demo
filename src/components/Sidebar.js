@@ -1,8 +1,6 @@
 import React from "react";
 
-function Sidebar({ highlights, resetHighlights, setHighlightId, sideBarRef }) {
-  const refId = sideBarRef.current?.id.split("_")[1];
-
+function Sidebar({ highlights, resetHighlights, setHighlightId }) {
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
@@ -22,11 +20,8 @@ function Sidebar({ highlights, resetHighlights, setHighlightId, sideBarRef }) {
             <li
               id={`highlight_${highlight.id}`}
               key={index}
-              className={`sidebar__highlight ${
-                highlight.id === refId ? "sidebar_active" : ""
-              }`}
+              className={`sidebar__highlight`}
               onClick={() => setHighlightId(highlight.id)}
-              ref={sideBarRef}
             >
               <div>
                 <strong>{highlight.comment.text}</strong>
@@ -51,9 +46,7 @@ function Sidebar({ highlights, resetHighlights, setHighlightId, sideBarRef }) {
           );
         })}
       </ul>
-      {/* <div style={{ padding: "1rem" }}>
-        <button onClick={toggleDocument}>Toggle PDF document</button>
-      </div> */}
+
       {highlights.length > 0 ? (
         <div style={{ padding: "1rem" }}>
           <button onClick={resetHighlights}>Reset highlights</button>
